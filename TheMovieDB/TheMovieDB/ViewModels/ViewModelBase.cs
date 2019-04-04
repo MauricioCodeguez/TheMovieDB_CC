@@ -1,0 +1,58 @@
+﻿using Plugin.Connectivity;
+using Prism.Commands;
+using Prism.Mvvm;
+using Prism.Navigation;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace TheMovieDB.ViewModels
+{
+    public class ViewModelBase : BindableBase, INavigationAware, IDestructible
+    {
+        protected INavigationService NavigationService { get; private set; }
+
+        private string _title;
+        public string Title
+        {
+            get { return _title; }
+            set { SetProperty(ref _title, value); }
+        }
+
+        public bool IsConnected
+        {
+            get
+            {
+                if (!CrossConnectivity.IsSupported)
+                    return true;
+
+                return CrossConnectivity.Current.IsConnected;
+            }
+        }
+
+        public ViewModelBase(INavigationService navigationService)
+        {
+            NavigationService = navigationService;
+        }
+
+        public virtual void OnNavigatedFrom(INavigationParameters parameters)
+        {
+
+        }
+
+        public virtual void OnNavigatedTo(INavigationParameters parameters)
+        {
+
+        }
+
+        public virtual void OnNavigatingTo(INavigationParameters parameters)
+        {
+
+        }
+
+        public virtual void Destroy()
+        {
+
+        }
+    }
+}

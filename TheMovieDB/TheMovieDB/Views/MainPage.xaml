@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TheMovieDB.Views.MainPage"
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:messier16="clr-namespace:Messier16.Forms.Controls;assembly=Messier16.Forms.Controls"
+             Title="{Binding Title}">
+
+    <StackLayout>
+
+        <SearchBar x:Name="search" 
+                   Placeholder="Search"
+                   TextChanged="SearchBar_TextChanged" />
+        
+        <ActivityIndicator HeightRequest="50"
+                           WidthRequest="50"
+                           IsRunning="{Binding IsLoading}"
+                           IsVisible="{Binding IsLoading}" />
+
+        <ListView ItemsSource="{Binding UpcomingInfoListFiltered, Mode=TwoWay}"
+                  IsVisible="{Binding IsLoading, Converter={StaticResource InvertedBooleanConverter}}"
+                  SelectedItem="{Binding SelectedMovie, Mode=TwoWay}"
+                  HasUnevenRows="True"
+                  ItemAppearing="ListView_ItemAppearing"
+                  Margin="10">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Grid Padding="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <ffimageloading:CachedImage HeightRequest="150"
+                                                        WidthRequest="150"
+                                                        DownsampleToViewSize="true"
+                                                        Source="{Binding PosterPathUrl}">
+                            </ffimageloading:CachedImage>
+                            <Grid Grid.Column="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <StackLayout Spacing="0">
+                                    <Label Text="{Binding Title}"
+                                           TextColor="Black"
+                                           FontAttributes="Bold" />
+                                    <Label Text="{Binding Overview, Converter={StaticResource MaxLengthConverter}}"
+                                           TextColor="Black" />
+                                </StackLayout>
+                                <messier16:RatingBar Grid.Row="1"
+                                                     FilledImage="star_filled.png"
+                                                     Image="star.png"
+                                                     HorizontalOptions="End"
+                                                     VerticalOptions="End"
+                                                     MaxRating="5"
+                                                     IsEnabled="False"
+                                                     Rating="{Binding VoteAverageConverted}"
+                                                     FillColor="Navy"
+                                                     HeightRequest="30">
+                                    <messier16:RatingBar.WidthRequest>
+                                        <OnPlatform x:TypeArguments="x:Double"
+                                                    Android="100"
+                                                    iOS="170" />
+                                    </messier16:RatingBar.WidthRequest>
+                                </messier16:RatingBar>
+                                
+                            </Grid>
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <ActivityIndicator HeightRequest="50"
+                           WidthRequest="50"
+                           IsRunning="{Binding IsLoadingList}"
+                           IsVisible="{Binding IsLoadingList}" />
+        
+    </StackLayout>
+
+</ContentPage>
